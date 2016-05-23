@@ -1,0 +1,8 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=nuvola-app-8tracks
+pkgdesc='8tracks.com integration for Nuvola Player 3.0'
+pkgver=5.1
+pkgrel=1
+
+# template input; name=nuvola-app; version=1.0.0

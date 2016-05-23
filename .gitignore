@@ -1,0 +1,4 @@
+build
+*.tar.xz
+*.tar.gz
+_h5ai*

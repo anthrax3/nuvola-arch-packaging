@@ -1,0 +1,8 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=nuvola-app-yandex-music-git
+pkgdesc='Yandex.Music integration for Nuvola Player 3.1'
+pkgver=1
+pkgrel=1
+
+# template input; name=nuvola-app-git; version=1.0.0
