@@ -4,18 +4,23 @@ _gitname="${pkgname%-git}"
 arch=('any')
 depends=('nuvolaplayer-git')
 makedepends=('git' 'lasem' 'scour')
-license=('custom:BSD')
 sha256sums=('SKIP')
 source=("git+https://github.com/tiliado/${_gitname}.git")
 url="https://github.com/tiliado/${_gitname}"
 
 pkgver() {
 	cd "${_gitname}"
-	git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+	( set -o pipefail
+		git describe --long --tags 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+		printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	)
 }
 
 package() {
 	cd "${_gitname}"
+	# Optimize SVG icons (scour), generate PNG icons (lasem), build and install.
 	make install DEST="${pkgdir}/usr/share/nuvolaplayer3/web_apps"
-	install -Dm644 -t "${pkgdir}/usr/share/licenses/${pkgname}/"
+
+	# Install all available licenses.
+	install -Dm644 -t "${pkgdir}/usr/share/licenses/${pkgname}/" LICENSE*
 }

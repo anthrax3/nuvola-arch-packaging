@@ -1,0 +1,10 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=nuvola-app-google-calendar
+pkgdesc='(Experimental) Google Calendar integration for Nuvola Player 3.0'
+pkgver=1.1
+pkgrel=1
+
+license=('BSD' 'CCPL:by')
+
+# template input; name=nuvola-app; version=1.0.1

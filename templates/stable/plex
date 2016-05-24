@@ -1,0 +1,13 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=nuvola-app-plex
+pkgdesc='Plex Media integration for Nuvola Player 3.0'
+pkgver=1.1
+pkgrel=1
+
+license=('BSD')
+
+# template input; name=nuvola-app; version=1.0.1
+
+# GitHub releases for nuvola-app-plex are tagged v#.#.
+source=("$pkgname-$pkgver.tar.gz::https://github.com/tiliado/${pkgname}/archive/v${pkgver}.tar.gz")

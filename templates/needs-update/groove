@@ -1,8 +1,0 @@
-# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
-
-pkgname=nuvola-app-groove
-pkgdesc='Microsoft Groove Music integration for Nuvola Player 3.0'
-pkgver=1.1
-pkgrel=1
-
-# template input; name=nuvola-app; version=1.0.0

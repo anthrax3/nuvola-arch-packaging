@@ -1,0 +1,10 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=nuvola-app-owncloud-music-git
+pkgdesc='OwnCloud Music integration for Nuvola Player'
+pkgver=0
+pkgrel=1
+
+license=('BSD' 'CCPL:by')
+
+# template input; name=nuvola-app-git; version=1.0.1

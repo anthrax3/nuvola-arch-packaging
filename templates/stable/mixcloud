@@ -1,9 +1,9 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
-pkgname=nuvola-app-bandcamp
-pkgdesc='Bandcamp integration for Nuvola Player 3.0'
-pkgver=2.1
-pkgrel=2
+pkgname=nuvola-app-mixcloud
+pkgdesc='Mixcloud integration for Nuvola Player 3.0'
+pkgver=3.0
+pkgrel=1
 
 license=('BSD')
 

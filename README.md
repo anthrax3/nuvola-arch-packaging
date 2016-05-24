@@ -26,9 +26,46 @@ pacman -S devtools repose  # Note that repose is not available in the official r
 git clone https://git.celti.name/nuvola-arch-packaging.git
 cd nuvola-arch-packaging
 
-./create-chroots.sh
-./build.sh all_stable
-./build.sh all_latest
-./build.sh sign_and_publish
-./clean.sh remove_all
+# Build and publish the tree, then clean up.
+./do create chroots
+./do build all stable
+./do build all latest
+./do publish
+./do clean dist
+
+# Build single stable app in an updated container.
+./do clean chroots
+./do update chroots
+./do build single stable google-play-music
+
+# Wipe the entire tree, then build several -git apps and publish them.
+./do clean dist
+./do create chroots
+./do build single latest google-play-music-git yandex-music-git bandcamp-git deezer-git
+./do publish
 ```
+
+## Build Status
+### Fully Functional
+ - [Bandcamp](https://github.com/tiliado/nuvola-app-bandcamp)
+ - [Deezer](https://github.com/tiliado/nuvola-app-deezer)
+ - [Google Play Music](https://github.com/tiliado/nuvola-app-google-play-music)
+
+### Outdated Makefiles
+ - [Amazon Cloud Player](https://github.com/tiliado/nuvola-app-amazon-cloud-player)
+ - [Jango](https://github.com/tiliado/nuvola-app-jango)
+ - [KEXP-FM radio (Seattle 90.3)](https://github.com/tiliado/nuvola-app-kexp)
+ - [Microsoft Groove Music](https://github.com/tiliado/nuvola-app-groove)
+ - [Mixcloud](https://github.com/tiliado/nuvola-app-mixcloud)
+ - [OwnCloud Music](https://github.com/tiliado/nuvola-app-owncloud-music)
+ - [Plex Media](https://github.com/tiliado/nuvola-app-plex)
+ - [SoundCloud](https://github.com/tiliado/nuvola-app-soundcloud)
+ - [Spotify](https://github.com/tiliado/nuvola-app-spotify)
+ - [TuneIn](https://github.com/tiliado/nuvola-app-tunein)
+ - [Yandex.Music](https://github.com/tiliado/nuvola-app-yandex-music)
+
+### Incomplete/Experimental (Not Building)
+ - [8tracks](https://github.com/tiliado/nuvola-app-8tracks)
+ - [Google Calendar](https://github.com/tiliado/nuvola-app-google-calendar)
+ - [Hype Machine](https://github.com/tiliado/nuvola-app-hype-machine)
+ - [Pandora Radio](https://github.com/tiliado/nuvola-app-pandora)

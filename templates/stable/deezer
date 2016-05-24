@@ -3,6 +3,8 @@
 pkgname=nuvola-app-deezer
 pkgdesc='Deezer integration for Nuvola Player 3.0'
 pkgver=2.4
-pkgrel=1
+pkgrel=2
 
-# template input; name=nuvola-app; version=1.0.0
+license=('BSD')
+
+# template input; name=nuvola-app; version=1.0.1

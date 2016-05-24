@@ -1,0 +1,14 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=nuvola-app-google-play-music-git
+pkgdesc='Google Play Music integration for Nuvola Player'
+pkgver=0
+pkgrel=1
+
+license=('BSD')
+
+# Old (non-upstream) package name.
+provides=('nuvola-app-google-play-git')
+replaces=('nuvola-app-google-play-git')
+
+# template input; name=nuvola-app-git; version=1.0.1
