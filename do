@@ -20,7 +20,7 @@ ARCHITECTURES=('i686' 'x86_64')
 
 sudo_env_args=("PKGDEST=${PKGDEST}" "SRCDEST=${SRCDEST}" "LOGDEST=${LOGDEST}")
 makepkg_template_args=('--template-dir' "${BASEDIR}/templates/makepkg")
-makechrootpkg_args=('-c' '-n' '-l' 'build' '--' '--syncdeps' '--log' '--clean')
+makechrootpkg_args=('-n' '-l' 'build' '--' '--syncdeps' '--log' '--clean')
 gpg_args=('--batch' '--yes' '--no-armor')
 repose_args=('--verbose' '--pool' "${POOL}" '--xz' '--sign' '--files' '--verbose' 'nuvolaplayer')
 mkarchroot_dependencies=('base-devel' 'namcap' 'git' 'python' 'vala' 'gtk3' 'libarchive' 'webkit2gtk' 'lasem' 'scour')
@@ -33,9 +33,10 @@ APPS_STABLE=('amazon-cloud-player' 'bandcamp' 'deezer' 'google-play-music' 'groo
 ######## APPS_NOT_WORKING=('8tracks' 'google-calendar' 'hype-machine' 'pandora')
 
 # Set some error handling stuff.
+IFS=$'\n\t'
 PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 function exitmsg() { error "${1}"; exit "${2}"; }
-set -o errexit -o nounset
+set -o errexit -o nounset -o pipefail
 
 # Colourise if stderr is a terminal.
 [[ -t 2 ]] && colorize
@@ -171,7 +172,7 @@ function publish() {
 	# global POOL REPO PKGDEST
 
 	# List all built packages.
-	local -a packages=( $(find "${PKGDEST}" -name '*.pkg.tar.xz' -printf '%f ') )
+	local -a packages=( $(find "${PKGDEST}" -name '*.pkg.tar.xz' -printf '%f\n') )
 	msg "Built packages:"
 	for pkg in "${packages[@]}"; do msg2 "$pkg"; done
 
