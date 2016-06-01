@@ -27,6 +27,4 @@ depends=('nuvolaplayer-git'
 	'nuvola-app-tunein-git'
 	'nuvola-app-yandex-music-git'
 	'nuvola-app-google-calendar-git'
-	'nuvola-app-hype-machine-git'
-	'nuvola-app-pandora-git'
 )
