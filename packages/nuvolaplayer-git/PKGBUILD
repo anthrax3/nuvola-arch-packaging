@@ -1,7 +1,7 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
 pkgname=nuvolaplayer-git
-pkgver=0
+pkgver=3.1.0.r41.g29a155e
 pkgrel=1
 
 arch=('i686' 'x86_64')
@@ -57,6 +57,6 @@ package() {
 	python ./waf install --no-system-hooks --destdir="${pkgdir}"
 
 	# Installl makepkg template for nuvola-app-*-git integrations.
-	install -Dm644 "${srcdir}/nuvola-app-git-1.0.1.template" "${pkgdir}/usr/share/makepkg-template/nuvola-app-git-1.0.1.template"
-	ln -s nuvola-app-git-1.0.1.template "${pkgdir}/usr/share/makepkg-template/nuvola-app-git.template"
+	install -Dm644 "${srcdir}/nuvola-app-git-1.5.0.template" "${pkgdir}/usr/share/makepkg-template/nuvola-app-git-1.5.0.template"
+	ln -s nuvola-app-git-1.5.0.template "${pkgdir}/usr/share/makepkg-template/nuvola-app-git.template"
 }

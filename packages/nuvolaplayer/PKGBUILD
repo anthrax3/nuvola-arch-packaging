@@ -43,6 +43,6 @@ package() {
 	cd "${pkgname}-${pkgver}"
 	python ./waf install --no-system-hooks --destdir="${pkgdir}"
 
-	install -Dm644 "${srcdir}/nuvola-app-1.0.1.template" "${pkgdir}/usr/share/makepkg-template/nuvola-app-1.0.1.template"
-	ln -s nuvola-app-1.0.1.template "${pkgdir}/usr/share/makepkg-template/nuvola-app.template"
+	install -Dm644 "${srcdir}/nuvola-app-1.5.0.template" "${pkgdir}/usr/share/makepkg-template/nuvola-app-1.5.0.template"
+	ln -s nuvola-app-1.5.0.template "${pkgdir}/usr/share/makepkg-template/nuvola-app.template"
 }
