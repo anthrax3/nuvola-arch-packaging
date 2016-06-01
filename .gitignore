@@ -1,4 +1,10 @@
+# ignore build directory and mislaid package sources
 build
-*.tar.xz
-*.tar.gz
+src
+
+# ignore mislaid packages and signaturs
+*.tar.?z
+*.sig
+
+# ignore h5ai fancy indexer
 _h5ai*
