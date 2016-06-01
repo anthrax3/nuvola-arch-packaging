@@ -48,7 +48,7 @@ pkgver() {
 
 build() {
 	cd "$pkgname"
-	python ./waf configure --enable-apps-alpha --prefix=/usr
+	python ./waf configure --with-apps-alpha --prefix=/usr
 	python ./waf build
 }
 
