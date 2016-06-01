@@ -1,0 +1,30 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=diorite0.2
+pkgver=0.2.1
+pkgrel=1
+
+arch=('i686' 'x86_64')
+license=('GPL')
+pkgdesc='Utility and widget library based on Glib and GTK3.'
+url='https://tiliado.eu/diorite/'
+
+source=("diorite-${pkgver}.tar.gz::https://github.com/tiliado/diorite/archive/${pkgver}.tar.gz")
+sha256sums=('188335b58e7fea03e81c89d6f2bb1694063bac34483de05ee1e600e1cf696dd0')
+
+replaces=('diorite')
+
+depends=('gtk3')
+makedepends=('python' 'vala')
+optdepends=('python: For generating tests')
+
+build() {
+	cd "diorite-${pkgver}"
+	./waf configure --prefix=/usr
+	./waf build
+}
+
+package() {
+	cd "diorite-${pkgver}"
+	./waf install --destdir="${pkgdir}"
+}
