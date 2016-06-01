@@ -30,7 +30,7 @@ CORE_STABLE=('diorite0.2' 'nuvolaplayer')
 CORE_LATEST=('diorite0.3' 'nuvolaplayer-git')
 
 APPS_STABLE=('8tracks' 'amazon-cloud-player' 'bandcamp' 'deezer' 'google-play-music' 'groove' 'jango' 'logitech-media-server' 'mixcloud' 'owncloud-music' 'plex' 'soundcloud' 'spotify' 'tunein' 'yandex-music' 'all-services')
-APPS_LATEST=('8tracks-git' 'amazon-cloud-player-git' 'bandcamp-git' 'deezer-git' 'google-calendar' 'google-play-music-git' 'groove-git' 'jango-git' 'kexp-git' 'logitech-media-server-git' 'mixcloud-git' 'owncloud-music-git' 'plex-git' 'soundcloud-git' 'spotify-git' 'tunein-git' 'yandex-music-git' 'all-services-git')
+APPS_LATEST=('8tracks-git' 'amazon-cloud-player-git' 'bandcamp-git' 'deezer-git' 'google-calendar-git' 'google-play-music-git' 'groove-git' 'jango-git' 'kexp-git' 'logitech-media-server-git' 'mixcloud-git' 'owncloud-music-git' 'plex-git' 'soundcloud-git' 'spotify-git' 'tunein-git' 'yandex-music-git' 'all-services-git')
 APPS_NOT_WORKING=('hype-machine' 'pandora')
 
 # Set some error handling stuff.
