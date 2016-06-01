@@ -3,6 +3,6 @@
 pkgname=nuvola-app-spotify-git
 pkgdesc='Spotify integration for Nuvola Player.'
 pkgver=0
-tkgrel=2
+pkgrel=2
 
 # template input; name=nuvola-app-git; version=1.5.0
