@@ -13,6 +13,7 @@ SRCDEST="${BUILDDIR}/sources"
 CHRDEST="${BUILDDIR}/chroot"
 LOGDEST="${BUILDDIR}/logs"
 
+REPO_NAME='nuvolaplayer'
 REPO='/srv/pacman/nuvolaplayer'
 POOL='/srv/pacman/packages'
 
@@ -22,15 +23,15 @@ sudo_env_args=("PKGDEST=${PKGDEST}" "SRCDEST=${SRCDEST}" "LOGDEST=${LOGDEST}")
 makepkg_template_args=('--template-dir' "${BASEDIR}/templates/makepkg")
 makechrootpkg_args=('-n' '-l' 'build' '--' '--syncdeps' '--log' '--clean')
 gpg_args=('--batch' '--yes' '--no-armor')
-repose_args=('--verbose' '--pool' "${POOL}" '--xz' '--sign' '--files' '--verbose' 'nuvolaplayer')
+repose_args=('--pool' "${POOL}" '--xz' '--sign' '--files' '--verbose')
 mkarchroot_dependencies=('base-devel' 'namcap' 'git' 'python' 'vala' 'gtk3' 'libarchive' 'webkit2gtk' 'lasem' 'scour')
 
-CORE_LATEST=('diorite-git' 'nuvolaplayer-git')
-APPS_LATEST=('amazon-cloud-player-git' 'bandcamp-git' 'deezer-git' 'google-play-music-git' 'groove-git' 'jango-git' 'kexp-git' 'logitech-media-server-git' 'mixcloud-git' 'owncloud-music-git' 'plex-git' 'soundcloud-git' 'spotify-git' 'tunein-git' 'yandex-music-git' 'all-services-git')
+CORE_STABLE=('diorite0.2' 'nuvolaplayer')
+CORE_LATEST=('diorite0.3' 'nuvolaplayer-git')
 
-CORE_STABLE=('diorite' 'nuvolaplayer')
-APPS_STABLE=('amazon-cloud-player' 'bandcamp' 'deezer' 'google-play-music' 'groove' 'jango' 'logitech-media-server' 'mixcloud' 'owncloud-music' 'plex' 'soundcloud' 'spotify' 'tunein' 'yandex-music' 'all-services')
-######## APPS_NOT_WORKING=('8tracks' 'google-calendar' 'hype-machine' 'pandora')
+APPS_STABLE=('8tracks' 'amazon-cloud-player' 'bandcamp' 'deezer' 'google-play-music' 'groove' 'jango' 'logitech-media-server' 'mixcloud' 'owncloud-music' 'plex' 'soundcloud' 'spotify' 'tunein' 'yandex-music' 'all-services')
+APPS_LATEST=('8tracks' 'amazon-cloud-player-git' 'bandcamp-git' 'deezer-git' 'google-calendar' 'google-play-music-git' 'groove-git' 'jango-git' 'kexp-git' 'logitech-media-server-git' 'mixcloud-git' 'owncloud-music-git' 'plex-git' 'soundcloud-git' 'spotify-git' 'tunein-git' 'yandex-music-git' 'all-services-git')
+APPS_NOT_WORKING=('hype-machine' 'pandora')
 
 # Set some error handling stuff.
 IFS=$'\n\t'
@@ -80,7 +81,7 @@ function build() {
 	[[ -d "${CHRDEST}/$(uname -m)/root" ]] || exitmsg "No chroot found in ${CHRDEST}! Run \`$0 create chroots\`." 1
 
 	function all() {
-		function stable() {
+		function releases() {
 			# global -f `create directories` `clean chroots` `update chroots` `build single`
 			# global -a makechrootpkg_args ARCHITECTURES APPS_STABLE CORE_STABLE
 			# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
@@ -103,9 +104,11 @@ function build() {
 			done
 
 			msg "Building app integration releases:"
-			for app in "${APPS_STABLE[@]}"; do
-				build single stable "${app}"
-			done
+			build app release "${APPS_STABLE[@]}"
+		}
+
+		function release() {
+			releases
 		}
 
 		function latest() {
@@ -131,16 +134,14 @@ function build() {
 			done
 
 			msg "Building latest app integration revisions:"
-			for app in "${APPS_LATEST[@]}"; do
-				build single latest "${app}"
-			done
+			build app latest "${APPS_LATEST[@]}"
 		}
 
 		COMMAND="${1}"
 		shift && "${COMMAND}" "${@}"
 	}
 
-	function single() {
+	function app() {
 		# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
 		# global -a makepkg_template_args makechrootpkg_args
 		local arch="$(uname -m)"
@@ -160,6 +161,10 @@ function build() {
 			msg2 "Finished: ${app} (any)."
 			rm -rf "${BUILDDIR}/any/${app}"
 		done
+	}
+
+	function apps() {
+		app "${@}"
 	}
 
 	COMMAND="${1}"
@@ -189,11 +194,12 @@ function publish() {
 
 	# Generate repositories and databases.
 	for arch in "${ARCHITECTURES[@]}"; do
+		local -a pkgnames=( $( printf '%s\n' "${packages[@]}" | sed 's#.*/##;s/-[^-]*$//;s/-[^-]*$//;s/-[^-]*$//;' | sort -u) )
 		msg "Updating and signing database [nuvolaplayer] (${arch}):"
 		msg2 "Dropping old packages..."
-		repose -m "${arch}" -r "${REPO}/${arch}" "${repose_args[@]}" --drop "${packages[@]}"
+		repose --arch="${arch}" --root="${REPO}/${arch}" "${repose_args[@]}" "${REPO_NAME}" --drop "${pkgnames[@]}"
 		msg2 "Adding new packages..."
-		repose -m "${arch}" -r "${REPO}/${arch}" "${repose_args[@]}" "${packages[@]}"
+		repose --arch="${arch}" --root="${REPO}/${arch}" "${repose_args[@]}" "${REPO_NAME}" "${pkgnames[@]}"
 	done
 }
 
