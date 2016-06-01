@@ -3,6 +3,6 @@
 pkgname=nuvola-app-amazon-cloud-player
 pkgdesc='Amazon Cloud Player integration for Nuvola Player.'
 pkgver=5.1
-pkgrel=1
+pkgrel=2
 
 # template input; name=nuvola-app; version=1.5.0

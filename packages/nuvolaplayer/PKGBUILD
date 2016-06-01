@@ -2,7 +2,7 @@
 
 pkgname=nuvolaplayer
 pkgver=3.0.2
-pkgrel=3
+pkgrel=4
 
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -10,9 +10,9 @@ pkgdesc='Cloud music integration for your Linux desktop.'
 url='https://tiliado.eu/nuvolaplayer/'
 
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/tiliado/${pkgname}/archive/${pkgver}.tar.gz"
-        'nuvola-app-1.5.0.template')
+        'nuvola-app-1.5.1.template')
 sha256sums=('0ba442b06df7df58f6fbaaa36be905d49fef079254bf923e6a80a54ea4bd6df6'
-            'a00575c8150ea95a90fb1d3bff885f5671fda8680700c6f3ad7e2b2dd5b94eb6')
+            '429f12bfa9bb8100c493eb80de067677e0023a7dec629d2fe895124e687f7a51')
 
 depends=('diorite0.2' 'webkit2gtk' 'libarchive')
 makedepends=('python' 'vala')
@@ -43,6 +43,6 @@ package() {
 	cd "${pkgname}-${pkgver}"
 	python ./waf install --no-system-hooks --destdir="${pkgdir}"
 
-	install -Dm644 "${srcdir}/nuvola-app-1.5.0.template" "${pkgdir}/usr/share/makepkg-template/nuvola-app-1.5.0.template"
-	ln -s nuvola-app-1.5.0.template "${pkgdir}/usr/share/makepkg-template/nuvola-app.template"
+	install -Dm644 "${srcdir}/nuvola-app-1.5.1.template" "${pkgdir}/usr/share/makepkg-template/nuvola-app-1.5.1.template"
+	ln -s nuvola-app-1.5.1.template "${pkgdir}/usr/share/makepkg-template/nuvola-app.template"
 }

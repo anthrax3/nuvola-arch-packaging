@@ -3,7 +3,7 @@
 pkgname=nuvola-app-logitech-media-server
 pkgdesc='Logitech Media Server integration for Nuvola Player.'
 pkgver=2.0
-pkgrel=1
+pkgrel=2
 
 # template input; name=nuvola-app; version=1.5.0
 

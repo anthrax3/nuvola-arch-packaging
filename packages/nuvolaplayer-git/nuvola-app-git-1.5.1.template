@@ -3,6 +3,7 @@
 _gitname="${pkgname%-git}"
 
 arch=('any')
+conflicts=("${_gitname}")
 depends=('nuvolaplayer')
 license=('BSD')
 makedepends=('git' 'lasem' 'scour')

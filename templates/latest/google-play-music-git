@@ -3,9 +3,9 @@
 pkgname=nuvola-app-google-play-music-git
 pkgdesc='Google Play Music integration for Nuvola Player.'
 pkgver=0
-pkgrel=2
+pkgrel=3
 
-# template input; name=nuvola-app-git; version=1.5.0
+# template input; name=nuvola-app-git; version=1.5.1
 
 provides=('nuvola-app-google-play-git')
 replaces=('nuvola-app-google-play-git')

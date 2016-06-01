@@ -3,6 +3,6 @@
 pkgname=nuvola-app-8tracks
 pkgdesc='8tracks.com integration for Nuvola Player.'
 pkgver=5.1
-pkgrel=1
+pkgrel=2
 
 # template input; name=nuvola-app; version=1.5.0

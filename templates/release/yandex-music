@@ -3,7 +3,7 @@
 pkgname=nuvola-app-yandex-music
 pkgdesc='Yandex.Music integration for Nuvola Player.'
 pkgver=1.1
-pkgrel=1
+pkgrel=2
 
 # template input; name=nuvola-app; version=1.5.0
 

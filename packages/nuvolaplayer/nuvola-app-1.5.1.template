@@ -5,6 +5,7 @@ depends=('nuvolaplayer')
 license=('BSD')
 makedepends=('lasem' 'scour')
 sha256sums=('FIXME')
+conflicts=("${pkgname}-git")
 source=("$pkgname-$pkgver.tar.gz::https://github.com/tiliado/${pkgname}/archive/${pkgver}.tar.gz")
 url="https://github.com/tiliado/${pkgname}"
 

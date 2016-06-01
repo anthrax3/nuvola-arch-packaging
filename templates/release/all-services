@@ -3,7 +3,7 @@
 pkgname=nuvola-app-all-services
 epoch=1
 pkgver=3.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Web application integrations for Nuvola Player (meta-package).'
 arch=('any')
 url='https://github.com/tiliado/'

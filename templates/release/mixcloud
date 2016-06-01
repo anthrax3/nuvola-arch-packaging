@@ -3,6 +3,6 @@
 pkgname=nuvola-app-mixcloud
 pkgdesc='Mixcloud integration for Nuvola Player.'
 pkgver=3.0
-pkgrel=1
+pkgrel=2
 
 # template input; name=nuvola-app; version=1.5.0

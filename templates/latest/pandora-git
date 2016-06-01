@@ -3,6 +3,6 @@
 pkgname=nuvola-app-pandora-git
 pkgdesc='Pandora Radio integration for Nuvola Player.'
 pkgver=0
-pkgrel=2
+pkgrel=3
 
-# template input; name=nuvola-app-git; version=1.5.0
+# template input; name=nuvola-app-git; version=1.5.1
