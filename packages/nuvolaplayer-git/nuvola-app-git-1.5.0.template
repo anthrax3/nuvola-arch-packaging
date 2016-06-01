@@ -1,8 +1,10 @@
 # Template-Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
 _gitname="${pkgname%-git}"
 
 arch=('any')
-depends=('nuvolaplayer-git')
+depends=('nuvolaplayer')
+license=('BSD')
 makedepends=('git' 'lasem' 'scour')
 sha256sums=('SKIP')
 source=("git+https://github.com/tiliado/${_gitname}.git")
@@ -15,9 +17,6 @@ pkgver() {
 
 package() {
 	cd "${_gitname}"
-	# Optimize SVG icons (scour), generate PNG icons (lasem), build and install.
 	make install DEST="${pkgdir}/usr/share/nuvolaplayer3/web_apps"
-
-	# Install all available licenses.
 	install -Dm644 -t "${pkgdir}/usr/share/licenses/${pkgname}/" LICENSE*
 }

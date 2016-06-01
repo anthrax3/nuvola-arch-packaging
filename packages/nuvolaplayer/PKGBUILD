@@ -1,18 +1,8 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
-# Unofficial repository (x86_64 and i686) available:
-# Build scripts at: https://repo.celti.name/nuvolaplayer/
-#
-# # Both the packages and the database are signed:
-# # `pacman-key --recv-keys 123C3F8B058A707F86643316FA682BD8910CF4EA`
-# # `pacman-key --lsign-key 123C3F8B058A707F86643316FA682BD8910CF4EA`
-# [nuvolaplayer]
-# SigLevel = Required TrustedOnly
-# Server = https://repo.celti.name/archlinux/$repo/$arch
-
 pkgname=nuvolaplayer
 pkgver=3.0.2
-pkgrel=2
+pkgrel=3
 
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -20,29 +10,28 @@ pkgdesc='Cloud music integration for your Linux desktop.'
 url='https://tiliado.eu/nuvolaplayer/'
 
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/tiliado/${pkgname}/archive/${pkgver}.tar.gz"
-        'nuvola-app-1.0.1.template')
+        'nuvola-app-1.5.0.template')
 sha256sums=('0ba442b06df7df58f6fbaaa36be905d49fef079254bf923e6a80a54ea4bd6df6'
-            '5694ce108cad4602ae07bff99b1df1dcbd28ce81ec8093b97f42b6121d54ead6')
+            'a00575c8150ea95a90fb1d3bff885f5671fda8680700c6f3ad7e2b2dd5b94eb6')
 
-conflicts=('nuvolaplayer-git')
-depends=('diorite' 'webkit2gtk' 'libarchive')
+depends=('diorite0.2' 'webkit2gtk' 'libarchive')
 makedepends=('python' 'vala')
-optdepends=('nuvola-app-amazon-cloud-player:   Amazon Cloud Player integration'
-            'nuvola-app-bandcamp:              Bandccamp integration'
-            'nuvola-app-deezer:                Deezer integration'
-            'nuvola-app-google-play-music:     Google Play Music integration'
-            'nuvola-app-groove:                Microsoft Groove Music integration'
-            'nuvola-app-jango:                 Jango integration'
-            'nuvola-app-logitech-media-server: Logitech Media Server integration'
-            'nuvola-app-mixcloud:              Mixcloud integration'
-            'nuvola-app-owncloud-music:        OwnCloud Music integration'
-            'nuvola-app-plex:                  Plex Media integration'
-            'nuvola-app-soundcloud:            SoundCloud integration'
-            'nuvola-app-spotify:               Spotify integration'
-            'nuvola-app-tunein:                TuneIn integration'
-            'nuvola-app-yandex-music:          Yandex.Music integration'
-            'nuvola-app-google-calendar:       (Experimental) Google Calendar integration'
-            'nuvola-app-8tracks:               8tracks.com integration (not functional)')
+optdepends=(
+	'nuvola-app-8tracks:               8tracks.com integration'
+	'nuvola-app-amazon-cloud-player:   Amazon Cloud Player integration'
+	'nuvola-app-bandcamp:              Bandccamp integration'
+	'nuvola-app-deezer:                Deezer integration'
+	'nuvola-app-google-play-music:     Google Play Music integration'
+	'nuvola-app-groove:                Microsoft Groove Music integration'
+	'nuvola-app-jango:                 Jango integration'
+	'nuvola-app-logitech-media-server: Logitech Media Server integration'
+	'nuvola-app-mixcloud:              Mixcloud integration'
+	'nuvola-app-plex:                  Plex Media integration'
+	'nuvola-app-soundcloud:            SoundCloud integration'
+	'nuvola-app-spotify:               Spotify integration'
+	'nuvola-app-tunein:                TuneIn integration'
+	'nuvola-app-yandex-music:          Yandex.Music integration'
+)
 
 build() {
 	cd "${pkgname}-${pkgver}"
@@ -54,7 +43,6 @@ package() {
 	cd "${pkgname}-${pkgver}"
 	python ./waf install --no-system-hooks --destdir="${pkgdir}"
 
-	# Installl makepkg template for nuvola-app-* integrations.
 	install -Dm644 "${srcdir}/nuvola-app-1.0.1.template" "${pkgdir}/usr/share/makepkg-template/nuvola-app-1.0.1.template"
 	ln -s nuvola-app-1.0.1.template "${pkgdir}/usr/share/makepkg-template/nuvola-app.template"
 }

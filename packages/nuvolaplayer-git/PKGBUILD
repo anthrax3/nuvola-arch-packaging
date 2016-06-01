@@ -1,17 +1,7 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
-# Unofficial repository (x86_64 and i686) available:
-# Build scripts at: https://repo.celti.name/nuvolaplayer/
-#
-# # Both the packages and the database are signed:
-# # `pacman-key --recv-keys 123C3F8B058A707F86643316FA682BD8910CF4EA`
-# # `pacman-key --lsign-key 123C3F8B058A707F86643316FA682BD8910CF4EA`
-# [nuvolaplayer]
-# SigLevel = Required TrustedOnly
-# Server = https://repo.celti.name/archlinux/$repo/$arch
-
 pkgname=nuvolaplayer-git
-pkgver=3.1.0.r37.g4d5feb9
+pkgver=0
 pkgrel=1
 
 arch=('i686' 'x86_64')
@@ -20,31 +10,36 @@ pkgdesc='Cloud music integration for your Linux desktop.'
 url='https://tiliado.eu/nuvolaplayer/'
 
 source=("$pkgname::git+https://github.com/tiliado/nuvolaplayer"
-        'nuvola-app-git-1.0.1.template')
+        'nuvola-app-git-1.5.0.template')
 sha256sums=('SKIP'
-            '22fe31b839cd7f0e17047ebc3c2ff8ab53e032b42173fa81f83031815e30a33c')
+            'cbc38fce387a56fe06ff80339e4d6557db46611c6736b96a2cc20254152a13c9')
 
-depends=('diorite-git' 'webkit2gtk' 'libarchive')
+provides=('nuvolaplayer=3.1.0')
+conflicts=('nuvolaplayer')
+
+depends=('diorite0.3' 'webkit2gtk' 'libarchive')
 makedepends=('git' 'python' 'vala')
-optdepends=('nuvola-app-amazon-cloud-player-git:   Amazon Cloud Player integration'
-            'nuvola-app-bandcamp-git:              Bandccamp integration'
-            'nuvola-app-deezer-git:                Deezer integration'
-            'nuvola-app-google-play-music-git:     Google Play Music integration'
-            'nuvola-app-groove-git:                Microsoft Groove Music integration'
-            'nuvola-app-jango-git:                 Jango integration'
-            'nuvola-app-kexp-git:                  KEXP-FM (Seattle 90.3) integration'
-            'nuvola-app-logitech-media-server-git: Logitech Media Server integration'
-            'nuvola-app-mixcloud-git:              Mixcloud integration'
-            'nuvola-app-owncloud-music-git:        OwnCloud Music integration'
-            'nuvola-app-plex-git:                  Plex Media integration'
-            'nuvola-app-soundcloud-git:            SoundCloud integration'
-            'nuvola-app-spotify-git:               Spotify integration'
-            'nuvola-app-tunein-git:                TuneIn integration'
-            'nuvola-app-yandex-music-git:          Yandex.Music integration'
-            'nuvola-app-google-calendar-git:       (Experimental) Google Calendar integration'
-            'nuvola-app-8tracks-git:               8tracks.com integration (not functional)'
-            'nuvola-app-hype-machine-git:          Hype Machine integration (not functional)'
-            'nuvola-app-pandora-git:               Pandora integration (not functional)' )
+optdepends=(
+	'nuvola-app-8tracks-git:               8tracks.com integration'
+	'nuvola-app-amazon-cloud-player-git:   Amazon Cloud Player integration'
+	'nuvola-app-bandcamp-git:              Bandccamp integration'
+	'nuvola-app-deezer-git:                Deezer integration'
+	'nuvola-app-google-play-music-git:     Google Play Music integration'
+	'nuvola-app-groove-git:                Microsoft Groove Music integration'
+	'nuvola-app-jango-git:                 Jango integration'
+	'nuvola-app-kexp-git:                  KEXP-FM (Seattle 90.3) integration'
+	'nuvola-app-logitech-media-server-git: Logitech Media Server integration'
+	'nuvola-app-mixcloud-git:              Mixcloud integration'
+	'nuvola-app-owncloud-music-git:        OwnCloud Music integration'
+	'nuvola-app-plex-git:                  Plex Media integration'
+	'nuvola-app-soundcloud-git:            SoundCloud integration'
+	'nuvola-app-spotify-git:               Spotify integration'
+	'nuvola-app-tunein-git:                TuneIn integration'
+	'nuvola-app-yandex-music-git:          Yandex.Music integration'
+	'nuvola-app-google-calendar-git:       Google Calendar integration (experimental)'
+	'nuvola-app-hype-machine-git:          Hype Machine integration (not functional)'
+	'nuvola-app-pandora-git:               Pandora integration (not functional)'
+)
 
 pkgver() {
 	cd "$pkgname"
@@ -53,7 +48,7 @@ pkgver() {
 
 build() {
 	cd "$pkgname"
-	python ./waf configure --prefix=/usr
+	python ./waf configure --enable-apps-alpha --prefix=/usr
 	python ./waf build
 }
 
