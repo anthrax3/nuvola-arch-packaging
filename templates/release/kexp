@@ -1,0 +1,13 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=nuvola-app-kexp
+pkgdesc='KEXP-FM radio (Seattle 90.3) integration for Nuvola Player.'
+pkgver=0
+pkgrel=0
+
+# template input; name=nuvola-app; version=1.5.0
+
+# No stable release has been tagged. We exit here to raise
+# a build error in case of accidental targeting.
+error "No stable release exists for the KEXP-FM integration."
+exit 1

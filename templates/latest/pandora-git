@@ -1,10 +1,8 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
 pkgname=nuvola-app-pandora-git
-pkgdesc='Pandora Radio integration for Nuvola Player'
+pkgdesc='Pandora Radio integration for Nuvola Player.'
 pkgver=0
-pkgrel=1
+pkgrel=2
 
-license=('BSD')
-
-# template input; name=nuvola-app-git; version=1.0.1
+# template input; name=nuvola-app-git; version=1.5.0

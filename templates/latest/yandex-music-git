@@ -1,15 +1,15 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
 pkgname=nuvola-app-yandex-music-git
-pkgdesc='Yandex.Music integration for Nuvola Player'
+pkgdesc='Yandex.Music integration for Nuvola Player.'
 pkgver=0
-pkgrel=1
+pkgrel=2
 
-license=('BSD' 'CCPL:by')
+# template input; name=nuvola-app-git; version=1.5.0
+
+license+=('CCPL:by')
 
 prepare() {
 	cd "${_gitname}"
 	sed -i 's/install: LICENSE/install:/' Makefile
 }
-
-# template input; name=nuvola-app-git; version=1.0.1

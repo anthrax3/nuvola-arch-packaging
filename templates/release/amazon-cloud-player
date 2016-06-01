@@ -1,8 +1,8 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
-pkgname=nuvola-app-amazon-cloud-player-git
+pkgname=nuvola-app-amazon-cloud-player
 pkgdesc='Amazon Cloud Player integration for Nuvola Player.'
-pkgver=0
-pkgrel=2
+pkgver=5.1
+pkgrel=1
 
-# template input; name=nuvola-app-git; version=1.5.0
+# template input; name=nuvola-app; version=1.5.0

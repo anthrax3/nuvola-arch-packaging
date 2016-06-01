@@ -1,10 +1,10 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
-pkgname=nuvola-app-soundcloud-git
+pkgname=nuvola-app-soundcloud
 pkgdesc='SoundCloud integration for Nuvola Player.'
-pkgver=0
-pkgrel=2
+pkgver=1.1
+pkgrel=1
 
-# template input; name=nuvola-app-git; version=1.5.0
+# template input; name=nuvola-app; version=1.5.0
 
 license+=('MIT' 'CCPL:by')

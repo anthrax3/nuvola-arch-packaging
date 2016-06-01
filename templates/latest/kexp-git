@@ -1,10 +1,8 @@
 # Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
 
 pkgname=nuvola-app-kexp-git
-pkgdesc='KEXP-FM radio (Seattle 90.3) integration for Nuvola Player'
+pkgdesc='KEXP-FM radio (Seattle 90.3) integration for Nuvola Player.'
 pkgver=0
-pkgrel=1
+pkgrel=2
 
-license=('BSD')
-
-# template input; name=nuvola-app-git; version=1.0.1
+# template input; name=nuvola-app-git; version=1.5.0
