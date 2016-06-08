@@ -5,4 +5,4 @@ pkgdesc='Deezer integration for Nuvola Player.'
 pkgver=2.4
 pkgrel=3
 
-# template input; name=nuvola-app; version=1.5.0
+# template input; name=nuvola-app; version=1.5.1

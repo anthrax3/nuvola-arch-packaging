@@ -60,7 +60,7 @@ cd nuvola-arch-packaging
  - [Google Play Music](https://github.com/tiliado/nuvola-app-google-play-music): Fully functional.
  - [Hype Machine](https://github.com/tiliado/nuvola-app-hype-machine): Not currently functional, not being built.
  - [Jango](https://github.com/tiliado/nuvola-app-jango): Outdated Makefiles.
- - [KEXP-FM radio (Seattle 90.3)](https://github.com/tiliado/nuvola-app-kexp): Outdated Makefiles, no tagged release.
+ - [KEXP-FM radio (Seattle 90.3)](https://github.com/tiliado/nuvola-app-kexp): Outdated Makefiles.
  - [Microsoft Groove Music](https://github.com/tiliado/nuvola-app-groove): Outdated Makefiles.
  - [Mixcloud](https://github.com/tiliado/nuvola-app-mixcloud): Outdated Makefiles.
  - [OwnCloud Music](https://github.com/tiliado/nuvola-app-owncloud-music): Outdated Makefiles, requires nuvolaplayer-git.
