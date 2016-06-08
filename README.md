@@ -44,9 +44,10 @@ cd nuvola-arch-packaging
 ./do build app release google-play-music
 ./do publish
 
-# Wipe the entire tree, then build several -git apps and publish them.
+# Wipe the entire tree, then build several -git apps and packages and publish them.
 ./do clean dist
 ./do create chroots
+./do build package x86_64 diorite0.3 nuvolaplayer-git
 ./do build apps latest google-play-music-git yandex-music-git bandcamp-git deezer-git
 ./do publish
 ```

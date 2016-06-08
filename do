@@ -54,7 +54,7 @@ function create() {
 	}
 
 	function chroots() {
-		# global -f create directories
+		# global -f `create directories`
 		# global -a ARCHITECTURES mkarchroot_dependencies
 		# global BASEDIR CHRDEST
 
@@ -82,7 +82,7 @@ function build() {
 
 	function all() {
 		function releases() {
-			# global -f `create directories` `clean chroots` `update chroots` `build single`
+			# global -f `create directories` `clean chroots` `update chroots` `build package` `build app`
 			# global -a makechrootpkg_args ARCHITECTURES APPS_STABLE CORE_STABLE
 			# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
 			create directories
@@ -91,16 +91,7 @@ function build() {
 
 			msg "Building core software releases:"
 			for arch in "${ARCHITECTURES[@]}"; do
-				for core in "${CORE_STABLE[@]}"; do
-					cp -r "${BASEDIR}/packages/${core}" "${BUILDDIR}/${arch}/${core}"
-					(
-						cd "${BUILDDIR}/${arch}/${core}"
-						msg2 "Building ${core} (${arch})..."
-						sudo -E "${sudo_env_args[@]}" makechrootpkg -r "${CHRDEST}/${arch}" "${makechrootpkg_args[@]}"
-						msg2 "Finished: ${core} (${arch})."
-					)
-					rm -rf "${BUILDDIR}/${arch}/${core}"
-				done
+				build package "$arch" "${CORE_STABLE[@]}"
 			done
 
 			msg "Building app integration releases:"
@@ -112,7 +103,7 @@ function build() {
 		}
 
 		function latest() {
-			# global -f `create directories` `clean chroots` `update chroots` `build single`
+			# global -f `create directories` `clean chroots` `update chroots` `build package` `build app`
 			# global -a makechrootpkg_args ARCHITECTURES APPS_LATEST CORE_LATEST
 			# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
 			create directories
@@ -121,16 +112,7 @@ function build() {
 
 			msg "Building latest core software revisions:"
 			for arch in "${ARCHITECTURES[@]}"; do
-				for core in "${CORE_LATEST[@]}"; do
-					cp -r "${BASEDIR}/packages/${core}" "${BUILDDIR}/${arch}/${core}"
-					(
-						msg2 "Building ${core} (${arch})..."
-						cd "${BUILDDIR}/${arch}/${core}"
-						sudo -E "${sudo_env_args[@]}" makechrootpkg -r "${CHRDEST}/${arch}" "${makechrootpkg_args[@]}"
-						msg2 "Finished: ${core} (${arch})."
-					)
-					rm -rf "${BUILDDIR}/${arch}/${core}"
-				done
+				build package "$arch" "${CORE_LATEST[@]}"
 			done
 
 			msg "Building latest app integration revisions:"
@@ -139,6 +121,24 @@ function build() {
 
 		COMMAND="${1}"
 		shift && "${COMMAND}" "${@}"
+	}
+
+	function package() {
+		# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
+		# global -a makechrootpkg_args ARCHITECTURES
+		local arch="${1}"
+		shift && local -a pkgs=( "${@}" )
+
+		for package in "${pkgs[@]}"; do
+			cp -r "${BASEDIR}/packages/${package}" "${BUILDDIR}/${arch}/${package}"
+			(
+				msg2 "Building ${package} (${arch})..."
+				cd "${BUILDDIR}/${arch}/${package}"
+				sudo -E "${sudo_env_args[@]}" makechrootpkg -r "${CHRDEST}/${arch}" "${makechrootpkg_args[@]}"
+				msg2 "Finished: ${package} (${arch})."
+			)
+			rm -rf "${BUILDDIR}/${arch}/${package}"
+		done
 	}
 
 	function app() {
