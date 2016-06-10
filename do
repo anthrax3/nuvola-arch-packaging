@@ -24,7 +24,7 @@ makepkg_template_args=('--template-dir' "${BASEDIR}/templates/makepkg")
 makechrootpkg_args=('-n' '-l' 'build' '--' '--syncdeps' '--log' '--clean')
 gpg_args=('--batch' '--yes' '--no-armor')
 repose_args=('--pool' "${POOL}" '--xz' '--sign' '--files' '--verbose')
-mkarchroot_dependencies=('base-devel' 'namcap' 'git' 'python' 'vala' 'gtk3' 'libarchive' 'webkit2gtk' 'lasem' 'scour')
+mkarchroot_dependencies=('base-devel' 'hardening-wrapper' 'namcap' 'git' 'python' 'vala' 'gtk3' 'libarchive' 'webkit2gtk' 'lasem' 'scour')
 
 CORE_STABLE=('diorite0.2' 'nuvolaplayer')
 CORE_LATEST=('diorite0.3' 'nuvolaplayer-git')
