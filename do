@@ -17,7 +17,11 @@ REPO_NAME='nuvolaplayer'
 REPO='/srv/pacman/nuvolaplayer'
 POOL='/srv/pacman/packages'
 
-ARCHITECTURES=('i686' 'x86_64')
+case $(uname -m) in
+	i686)   ARCHITECTURES=('i686') ;;
+	x86_64) ARCHITECTURES=('i686' 'x86_64') ;;
+	arm*)   ARCHITECTURES=('arm' 'armv6h' 'armv7h') ;;
+esac
 
 sudo_env_args=("PKGDEST=${PKGDEST}" "SRCDEST=${SRCDEST}" "LOGDEST=${LOGDEST}")
 makepkg_template_args=('--template-dir' "${BASEDIR}/templates/makepkg")
