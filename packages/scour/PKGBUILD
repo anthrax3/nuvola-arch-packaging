@@ -1,0 +1,22 @@
+pkgname=scour
+pkgver=0.33
+pkgrel=3
+
+arch=('any')
+license=('Apache')
+pkgdesc='An SVG scrubber (optimizer)'
+url='https://github.com/codedread/scour'
+
+depends=('python-setuptools')
+sha256sums=('e9b4fb4beb653afbdbc43c4cc0836902d6f287d882b6b7cdf714c456ff0841a8')
+source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz")
+
+build() {
+	cd "${pkgname}-${pkgver}"
+	python setup.py build
+}
+
+package() {
+	cd "${pkgname}-${pkgver}"
+	python setup.py install --root="${pkgdir}" --optimize="1"
+}
