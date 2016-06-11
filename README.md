@@ -22,7 +22,7 @@ pacman-key --lsign-key 123C3F8B058A707F86643316FA682BD8910CF4EA
 ```
 
 ## Usage
-By default, all building happens in `${PWD}/build/`, the packages end up in `/srv/pacman/packages/`, and the repository is named `[nuvolaplayer]` and ends up in `/srv/pacman/nuvolaplayer/${ARCH}`, for both x86\_64 and i686.
+By default, all building happens in `${PWD}/build/`, the packages end up in `/srv/pacman/packages/`, and the repository is named `[nuvolaplayer]` and ends up in `/srv/pacman/nuvolaplayer/${ARCH}`, for all architectures supported by the build machine.
 
 ```sh
 pacman -S devtools repose
@@ -33,8 +33,8 @@ cd nuvola-arch-packaging
 
 # Build and publish the tree, then delete all working files.
 ./do create chroots
-./do build all releases
-./do build all latest
+./do build all packages
+./do build all apps
 ./do publish
 ./do clean dist
 
@@ -44,11 +44,11 @@ cd nuvola-arch-packaging
 ./do build app release google-play-music
 ./do publish
 
-# Wipe the entire tree, then build several -git apps and packages and publish them.
+# Wipe the entire tree, then build and publish several -git packages/apps.
 ./do clean dist
 ./do create chroots
-./do build package x86_64 diorite0.3 nuvolaplayer-git
-./do build apps latest google-play-music-git yandex-music-git bandcamp-git deezer-git
+./do build packages webkit2gtk-mse diorite0.3 nuvolaplayer-git
+./do build apps latest google-play-music-git spotify-git bandcamp-git
 ./do publish
 ```
 

@@ -8,6 +8,7 @@ set -o nounset
 STARTED="$(date -Im)"
 BASEDIR="${PWD}"
 BUILDDIR="${BASEDIR}/build"
+SYNCDEST="${BUILDDIR}/sync"
 PKGDEST="${BUILDDIR}/packages"
 SRCDEST="${BUILDDIR}/sources"
 CHRDEST="${BUILDDIR}/chroot"
@@ -19,8 +20,10 @@ POOL='/srv/pacman/packages'
 
 case $(uname -m) in
 	i686)   ARCHITECTURES=('i686') ;;
-	x86_64) ARCHITECTURES=('i686' 'x86_64') ;;
-	arm*)   ARCHITECTURES=('arm' 'armv6h' 'armv7h') ;;
+	x86_64) ARCHITECTURES=('x86_64' 'i686') ;;
+	armv7*) ARCHITECTURES=('armv7h' 'armv6h' 'arm') ;;
+	armv6*) ARCHITECTURES=('armv6h' 'arm') ;;
+	*)      ARCHITECTURES=("$(uname -m)") ;;
 esac
 
 sudo_env_args=("PKGDEST=${PKGDEST}" "SRCDEST=${SRCDEST}" "LOGDEST=${LOGDEST}")
@@ -30,6 +33,8 @@ gpg_args=('--batch' '--yes' '--no-armor')
 repose_args=('--pool' "${POOL}" '--xz' '--sign' '--files' '--verbose')
 mkarchroot_dependencies=('base-devel' 'hardening-wrapper' 'namcap' 'git' 'python' 'vala' 'gtk3' 'libarchive' 'webkit2gtk' 'lasem' 'scour')
 
+CORE_ANY=('scour')
+CORE_ALL=( ) #'webkit2gtk-mse')
 CORE_STABLE=('diorite0.2' 'nuvolaplayer')
 CORE_LATEST=('diorite0.3' 'nuvolaplayer-git')
 
@@ -47,16 +52,18 @@ set -o errexit -o nounset -o pipefail
 [[ -t 2 ]] && colorize
 
 function create() {
+	function directory() { directories; }
 	function directories() {
-		# global BUILDDIR PKGDEST SRCDEST LOGDEST CHRDEST REPO POOL
+		# global BUILDDIR PKGDEST SRCDEST LOGDEST CHRDEST SYNCDEST REPO POOL
 		# global -a ARCHITECTURES
-		mkdir -p "${BUILDDIR}" "${REPO}" "${POOL}"
-		mkdir -p "${PKGDEST}" "${SRCDEST}" "${LOGDEST}" "${CHRDEST}"
+		mkdir -p "${BUILDDIR}" "${REPO}" "${POOL}" "${PKGDEST}" \
+			"${SRCDEST}" "${LOGDEST}" "${CHRDEST}" "${SYNCDEST}"
 		( cd "${BUILDDIR}"; mkdir -p "${ARCHITECTURES[@]}" "any" )
 		( cd "${CHRDEST}"; mkdir -p "${ARCHITECTURES[@]}" )
 		( cd "${REPO}"; mkdir -p "${ARCHITECTURES[@]}" )
 	}
 
+	function chroot() { chroots; }
 	function chroots() {
 		# global -f `create directories`
 		# global -a ARCHITECTURES mkarchroot_dependencies
@@ -80,71 +87,102 @@ function create() {
 	shift && "${COMMAND}" "${@}"
 }
 
+function check() {
+	function chroot() { chroots; }
+	function chroots() {
+		# global BUILDDIR CHRDEST -a ARCHITECTURES
+		[[ -d "${CHRDEST}/$(uname -m)/root" ]] || exitmsg "No chroot found in ${CHRDEST}! Run \`$0 create chroots\`." 1
+		for arch in "${ARCHITECTURES[@]}"; do
+			local Config="${BASEDIR}/config/pacman.conf"
+			local DBFake="${SYNCDEST}/${arch}"
+			local DBPath="${CHRDEST}/${arch}/root/var/lib/pacman"
+
+			mkdir -p "${DBFake}"
+			ln -sf "${DBPath}/local" "${DBFake}"
+			fakeroot -- pacman -Sy --dbpath "${DBFake}" --config "${Config}" --logfile /dev/null &> /dev/null
+			pacman -Qu --dbpath "${DBFake}" --config "${Config}" &> /dev/null && exitmsg "Updates available! Run \`$0 update chroots\`." 2
+		done
+	}
+
+	COMMAND="${1}"
+	shift && "${COMMAND}" "${@}"
+}
+
+function update() {
+	function chroot() { chroots; }
+	function chroots() {
+		# global BASEDIR CHRDEST
+		# global -a ARCHITECTURES
+
+		[[ -d "${CHRDEST}/$(uname -m)/root" ]] || exitmsg "No chroot found in ${CHRDEST}! Run \`$0 create chroots\`." 1
+
+		msg "Updating chroots in ${CHRDEST}:"
+		for arch in "${ARCHITECTURES[@]}"; do
+			msg2 "Updating ${arch} chroot..."
+			sudo arch-nspawn \
+				-C "${BASEDIR}/config/pacman.conf" \
+				-M "/usr/share/devtools/makepkg-${arch}.conf" \
+				"${CHRDEST}/${arch}/root" \
+				pacman -Syu --noconfirm
+		done
+	}
+
+	COMMAND="${1}"
+	shift && "${COMMAND}" "${@}"
+}
+
 function build() {
-	# global CHRDEST
-	[[ -d "${CHRDEST}/$(uname -m)/root" ]] || exitmsg "No chroot found in ${CHRDEST}! Run \`$0 create chroots\`." 1
-
 	function all() {
-		function releases() {
-			# global -f `create directories` `clean chroots` `update chroots` `build package` `build app`
-			# global -a makechrootpkg_args ARCHITECTURES APPS_STABLE CORE_STABLE
+		function package() { packages; }
+		function packages() {
+			# global -f `check chroots` `clean chroots` `create directories`
+			# global -f `build package` -a makechrootpkg_args ARCHITECTURES
+			# global -a CORE_ANY CORE_ALL CORE_STABLE CORE_LATEST
 			# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
 			create directories
+			check chroots
+
+			msg "Building core packages..."
+
 			clean chroots
-			update chroots
+			msg2 "Building support packages..."
+			build packages "${CORE_ANY[@]}" "${CORE_ALL[@]}"
 
-			msg "Building core software releases:"
-			for arch in "${ARCHITECTURES[@]}"; do
-				build package "$arch" "${CORE_STABLE[@]}"
-			done
+			clean chroots
+			msg2 "Building latest packages..."
+			build packages "${CORE_LATEST[@]}"
 
-			msg "Building app integration releases:"
-			build app release "${APPS_STABLE[@]}"
+			clean chroots
+			msg2 "Building release packages..."
+			build packages "${CORE_STABLE[@]}"
+
+			msg "Done! Consider running \`$0 build all apps\` now."
 		}
 
-		function release() {
-			releases
-		}
-
-		function latest() {
-			# global -f `create directories` `clean chroots` `update chroots` `build package` `build app`
-			# global -a makechrootpkg_args ARCHITECTURES APPS_LATEST CORE_LATEST
+		function app() { apps; }
+		function apps() {
+			# global -f `check chroots` `clean chroots` `create directories`
+			# global -f `build app` -a makechrootpkg_args
+			# global -a APPS_LATEST APPS_STABLE
 			# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
 			create directories
+			check chroots
 			clean chroots
-			update chroots
 
-			msg "Building latest core software revisions:"
-			for arch in "${ARCHITECTURES[@]}"; do
-				build package "$arch" "${CORE_LATEST[@]}"
-			done
+			msg "Building latest nuvola-app packages..."
+			build apps latest "${APPS_LATEST[@]}"
 
-			msg "Building latest app integration revisions:"
-			build app latest "${APPS_LATEST[@]}"
+			msg "Building release nuvola-app packages..."
+			build apps release "${APPS_STABLE[@]}"
+			
+			msg "Done! Consider running \`$0 publish\` now."
 		}
 
 		COMMAND="${1}"
 		shift && "${COMMAND}" "${@}"
 	}
 
-	function package() {
-		# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
-		# global -a makechrootpkg_args ARCHITECTURES
-		local arch="${1}"
-		shift && local -a pkgs=( "${@}" )
-
-		for package in "${pkgs[@]}"; do
-			cp -r "${BASEDIR}/packages/${package}" "${BUILDDIR}/${arch}/${package}"
-			(
-				msg2 "Building ${package} (${arch})..."
-				cd "${BUILDDIR}/${arch}/${package}"
-				sudo -E "${sudo_env_args[@]}" makechrootpkg -r "${CHRDEST}/${arch}" "${makechrootpkg_args[@]}"
-				msg2 "Finished: ${package} (${arch})."
-			)
-			rm -rf "${BUILDDIR}/${arch}/${package}"
-		done
-	}
-
+	function apps() { app "${@}"; }
 	function app() {
 		# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
 		# global -a makepkg_template_args makechrootpkg_args
@@ -167,14 +205,35 @@ function build() {
 		done
 	}
 
-	function apps() {
-		app "${@}"
+	function packages() { package; }
+	function package() {
+		# global BASEDIR BUILDDIR PKGDEST SRCDEST CHRDEST
+		# global -a makechrootpkg_args ARCHITECTURES
+		local -a pkgs=( "${@}" )
+		
+		for package in "${pkgs[@]}"; do
+			for arch in "${ARCHITECTURES[@]}"; do
+				grep -Ff \
+					<(printf '%s\n' "${ARCHITECTURES[@]}") \
+					<(cd "${BASEDIR}/packages/${package}" && makepkg --packagelist) \
+					&& pkgarch="$arch" || pkgarch="any"
+
+				msg2 "Building ${package} (${pkgarch})..."
+				cp -r "${BASEDIR}/packages/${package}" "${BUILDDIR}/${arch}/${package}"
+				(
+					cd "${BUILDDIR}/${arch}/${package}"
+					sudo -E "${sudo_env_args[@]}" makechrootpkg -r "${CHRDEST}/${arch}" "${makechrootpkg_args[@]}"
+				)
+				rm -rf "${BUILDDIR}/${arch}/${package}"
+				msg2 "Finished: ${package} (${pkgarch})."
+				[[ "${pkgarch}" == "any" ]] && continue 2
+			done
+		done
 	}
 
 	COMMAND="${1}"
 	shift && "${COMMAND}" "${@}"
 }
-
 
 function publish() {
 	# global -a ARCHITECTURES gpg_args repose_args
@@ -227,10 +286,11 @@ function clean() {
 	}
 
 	function chroots() {
-		# global CHRDEST
+		# global CHRDEST SYNCDEST
 		warning "Removing working copies of all chroots in ${CHRDEST}!"
 		sudo btrfs subvolume delete "${CHRDEST}"/*/build || true
 		sudo rm -rf "${CHRDEST}"/*/build
+		sudo rm -rf "${SYNCDEST}"
 	}
 
 	function dist() {
@@ -238,30 +298,6 @@ function clean() {
 		warning "Removing all non-distribution files (${BUILDDIR})!"
 		sudo btrfs subvolume delete "${CHRDEST}"/*/*/ || true
 		sudo rm -rf "${BUILDDIR}"
-	}
-
-	COMMAND="${1}"
-	shift && "${COMMAND}" "${@}"
-}
-
-
-function update() {
-
-	function chroots() {
-		# global BASEDIR CHRDEST
-		# global -a ARCHITECTURES
-
-		[[ -d "${CHRDEST}/$(uname -m)/root" ]] || exitmsg "No chroot found in ${CHRDEST}! Run \`$0 create chroots\`." 1
-
-		msg "Updating chroots in ${CHRDEST}:"
-		for arch in "${ARCHITECTURES[@]}"; do
-			msg2 "Updating ${arch} chroot..."
-			sudo arch-nspawn \
-				-C "${BASEDIR}/config/pacman.conf" \
-				-M "/usr/share/devtools/makepkg-${arch}.conf" \
-				"${CHRDEST}/${arch}/root" \
-				pacman -Syu --noconfirm
-		done
 	}
 
 	COMMAND="${1}"
