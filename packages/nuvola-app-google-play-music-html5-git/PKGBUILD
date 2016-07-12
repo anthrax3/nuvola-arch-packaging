@@ -1,0 +1,37 @@
+# Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+pkgname=nuvola-app-google-play-music-html5-git
+pkgdesc='Google Play Music integration for Nuvola Player (HTML5 test).'
+pkgver=0
+pkgrel=3
+
+# template start; name=nuvola-app-git; version=1.5.1;
+# Template-Maintainer: Patrick Burroughs (Celti) <celti@celti.name>
+
+_gitname="nuvola-app-google-play-music"
+
+arch=('any')
+conflicts=("${_gitname}")
+depends=('nuvolaplayer')
+license=('BSD')
+makedepends=('git' 'lasem' 'scour')
+sha256sums=('SKIP')
+source=("git+https://github.com/tiliado/${_gitname}.git#branch=html5-audio")
+url="https://github.com/tiliado/${_gitname}"
+
+pkgver() {
+	cd "${_gitname}"
+	( set -o pipefail
+		git describe --long --tags 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+		printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	)
+}
+
+package() {
+	cd "${_gitname}"
+	make install DEST="${pkgdir}/usr/share/nuvolaplayer3/web_apps"
+	install -Dm644 -t "${pkgdir}/usr/share/licenses/${pkgname}/" LICENSE*
+}
+# template end;
+
+conflicts=('nuvola-app-google-play-music-git')
