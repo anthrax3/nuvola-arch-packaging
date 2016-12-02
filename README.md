@@ -1,3 +1,7 @@
+# Unmaintained - archived
+
+This repository isn't maintained any longer and has been archived.
+
 # Nuvola Player Arch Linux Packaging Tools
 This is a collection of `bash` scripts that leverage [`makepkg-template`](https://www.archlinux.org/pacman/makepkg-template.1.html) (from [`pacman`](https://www.archlinux.org/pacman/)) and `makechrootpkg` (from the Arch Linux [devtools](https://git.archlinux.org/devtools.git)) to build a complete collection of packages (both stable and the latest git) for [Nuvola Player](https://tiliado.eu/nuvolaplayer/), and create a repository for them with [`repose`](https://github.com/vodik/repose).
 
